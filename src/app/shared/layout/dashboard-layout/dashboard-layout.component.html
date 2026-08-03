@@ -1,0 +1,68 @@
+<!-- Mobile overlay backdrop -->
+@if (sidenavService.isMobile() && sidenavService.isMobileOpen()) {
+<div class="sidebar-backdrop" (click)="sidenavService.closeMobile()"></div>
+}
+
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar" [class.expanded]="!sidenavService.isMobile() && sidenavService.isOpen()"
+    [class.collapsed]="!sidenavService.isMobile() && !sidenavService.isOpen()"
+    [class.mobile-open]="sidenavService.isMobile() && sidenavService.isMobileOpen()"
+    [class.mobile-hidden]="sidenavService.isMobile() && !sidenavService.isMobileOpen()">
+
+    <div class="sidenav-layout">
+      <!-- Toggle button at top -->
+      <div class="sidenav-toggle" [class.justify-between]="sidenavService.isExpanded()"
+        [class.justify-center]="!sidenavService.isExpanded()">
+        @if (sidenavService.isExpanded()) {
+        <span class="text-sm font-medium text-[var(--mat-sys-on-surface-variant)]">Menú</span>
+        }
+        <button mat-icon-button
+          (click)="sidenavService.isMobile() ? sidenavService.closeMobile() : sidenavService.toggle()"
+          class="toggle-btn" [matTooltip]="sidenavService.isExpanded() ? '' : 'Expandir menú'"
+          matTooltipPosition="right">
+          <mat-icon>{{ sidenavService.isExpanded() ? 'chevron_left' : 'menu' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="sidenav-header">
+        <ng-content select="[sidenav-header]"></ng-content>
+      </div>
+
+      <div class="sidenav-body">
+        <ng-content select="[sidenav-nav]"></ng-content>
+      </div>
+
+      <div class="sidenav-footer">
+        <ng-content select="[sidenav-footer]"></ng-content>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="dashboard-main">
+
+    @if (routeLoading.isNavigating()) {
+    <mat-progress-bar mode="indeterminate" class="route-progress-bar"></mat-progress-bar>
+    }
+
+    <mat-toolbar class="dashboard-toolbar">
+      @if (sidenavService.isMobile()) {
+      <button mat-icon-button (click)="sidenavService.toggleMobile()" class="menu-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      }
+
+      <ng-content select="[toolbar-title]"></ng-content>
+
+      <span class="spacer"></span>
+
+      <ng-content select="[toolbar-actions]"></ng-content>
+    </mat-toolbar>
+
+    <div class="content-wrapper">
+    
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
