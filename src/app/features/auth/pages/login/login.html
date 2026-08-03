@@ -1,8 +1,7 @@
 <div class="login-container">
   <mat-card class="login-card" appearance="outlined">
     <mat-card-header>
-      <mat-card-title>Welcome Back</mat-card-title>
-      <mat-card-subtitle>Sign in to continue to Dashboard Landi</mat-card-subtitle>
+      <mat-card-title>Iniciar Sesión</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -13,64 +12,60 @@
         </div>
       }
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input
-            matInput
-            formControlName="email"
-            type="email"
-            placeholder="Ex. it@yourdomain.com"
-          />
-          <mat-icon matPrefix>email</mat-icon>
-          @if (loginForm.controls.email.hasError('required') && loginForm.controls.email.touched) {
-            <mat-error>Email is required</mat-error>
-          }
-          @if (loginForm.controls.email.hasError('email') && loginForm.controls.email.touched) {
-            <mat-error>Please enter a valid email address</mat-error>
-          }
-        </mat-form-field>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 mt-10">
+        <div class="field-container">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Correo</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="Email address" />
+            @if (
+              loginForm.controls.email.hasError('required') && loginForm.controls.email.touched
+            ) {
+              <mat-error>Correo es requerido</mat-error>
+            }
+            @if (loginForm.controls.email.hasError('email') && loginForm.controls.email.touched) {
+              <mat-error>Ingrese un correo valido</mat-error>
+            }
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            formControlName="password"
-            [type]="hidePassword() ? 'password' : 'text'"
-          />
-          <mat-icon matPrefix>lock</mat-icon>
-          <button
-            mat-icon-button
-            matSuffix
-            (click)="togglePasswordVisibility($event)"
-            [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hidePassword()"
-          >
-            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-          @if (
-            loginForm.controls.password.hasError('required') && loginForm.controls.password.touched
-          ) {
-            <mat-error>Password is required</mat-error>
-          }
-          @if (
-            loginForm.controls.password.hasError('minlength') && loginForm.controls.password.touched
-          ) {
-            <mat-error>Password must be at least 6 characters</mat-error>
-          }
-        </mat-form-field>
+        <div class="field-container">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              formControlName="password"
+              [type]="hidePassword() ? 'password' : 'text'"
+              placeholder="Password"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="togglePasswordVisibility($event)"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hidePassword()"
+            >
+              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (
+              loginForm.controls.password.hasError('required') &&
+              loginForm.controls.password.touched
+            ) {
+              <mat-error>La contraseña es requerida</mat-error>
+            }
+            @if (
+              loginForm.controls.password.hasError('minlength') &&
+              loginForm.controls.password.touched
+            ) {
+              <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
+            }
+          </mat-form-field>
+        </div>
 
-        <button
-          mat-flat-button
-          color="primary"
-          type="submit"
-          class="full-width login-button"
-          [disabled]="loading()"
-        >
+        <button mat-flat-button color="primary" type="submit" class="w-full" [disabled]="loading()">
           @if (loading()) {
             <mat-spinner diameter="24"></mat-spinner>
           } @else {
-            Sign In
+            Iniciar sesion
           }
         </button>
       </form>

@@ -1,0 +1,130 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'app/styles_theme-colors.scss' as custom;
+@use "tailwindcss";
+@include mat.core();
+
+
+$light-theme: mat.define-theme((color: (theme-type: light,
+                primary: custom.$primary-palette,
+                tertiary: custom.$tertiary-palette,
+
+
+            ),
+        density: (scale: -1)));
+
+
+$dark-theme: mat.define-theme((color: (theme-type: dark,
+                primary: custom.$primary-palette,
+                tertiary: custom.$tertiary-palette,
+            ),
+            density: (scale: -1)));
+
+html {
+  @include mat.all-component-themes($light-theme);
+  font-family: 'Inter', sans-serif;
+  color-scheme: light;
+
+
+  --mat-sys-primary: #{mat.get-theme-color($light-theme, primary)};
+  --mat-sys-on-primary: #{mat.get-theme-color($light-theme, on-primary)};
+  --mat-sys-primary-container: #{mat.get-theme-color($light-theme, primary-container)};
+  --mat-sys-on-primary-container: #{mat.get-theme-color($light-theme, on-primary-container)};
+
+  --mat-sys-tertiary: #{mat.get-theme-color($light-theme, tertiary)};
+  --mat-sys-on-tertiary: #{mat.get-theme-color($light-theme, on-tertiary)};
+  --mat-sys-tertiary-container: #{mat.get-theme-color($light-theme,tertiary-container)};
+  --mat-sys-on-tertiary-container: #{mat.get-theme-color($light-theme,on-tertiary-container)};
+
+
+
+  --mat-sys-secondary: #{mat.get-theme-color($light-theme, secondary)};
+  --mat-sys-on-secondary: #{mat.get-theme-color($light-theme, on-secondary)};
+  --mat-sys-secondary-container: #{mat.get-theme-color($light-theme, secondary-container)};
+  --mat-sys-on-secondary-container: #{mat.get-theme-color($light-theme, on-secondary-container)};
+
+  --mat-sys-surface: #{mat.get-theme-color($light-theme, surface)};
+  --mat-sys-on-surface: #{mat.get-theme-color($light-theme, on-surface)};
+  --mat-sys-surface-variant: #{mat.get-theme-color($light-theme, surface-variant)};
+  --mat-sys-on-surface-variant: #{mat.get-theme-color($light-theme, on-surface-variant)};
+
+  --mat-sys-outline: #{mat.get-theme-color($light-theme, outline)};
+  --mat-sys-outline-variant: #{mat.get-theme-color($light-theme, outline-variant)};
+
+  --mat-sys-background: #{mat.get-theme-color($light-theme, surface)};
+  --mat-sys-error: #{mat.get-theme-color($light-theme, error)};
+  --mat-sys-on-error: #{mat.get-theme-color($light-theme, on-error)};
+  --mat-sys-error-container: #{mat.get-theme-color($light-theme, error-container)};
+  --mat-sys-on-error-container: #{mat.get-theme-color($light-theme, on-error-container)};
+
+  --mat-sys-surface-container: #{mat.get-theme-color($light-theme, surface-container)};
+  --mat-sys-surface-container-high: #{mat.get-theme-color($light-theme, surface-container-high)};
+  --mat-sys-surface-container-highest: #{mat.get-theme-color($light-theme, surface-container-highest)};
+  --mat-sys-surface-container-low: #{mat.get-theme-color($light-theme, surface-container-low)};
+  --mat-sys-surface-container-lowest: #{mat.get-theme-color($light-theme, surface-container-lowest)};
+  --mat-sys-inverse-surface: #{mat.get-theme-color($light-theme, inverse-surface)};
+  --mat-sys-on-inverse-surface: #{mat.get-theme-color($light-theme, inverse-on-surface)};
+
+}
+
+
+html.dark-mode {
+    @include mat.all-component-themes($dark-theme);
+    color-scheme: dark;
+
+
+    --mat-sys-primary: #{mat.get-theme-color($dark-theme, primary)};
+    --mat-sys-on-primary: #{mat.get-theme-color($dark-theme, on-primary)};
+    --mat-sys-primary-container: #{mat.get-theme-color($dark-theme, primary-container)};
+    --mat-sys-on-primary-container: #{mat.get-theme-color($dark-theme, on-primary-container)};
+
+    --mat-sys-tertiary: #{mat.get-theme-color($dark-theme, tertiary)};
+    --mat-sys-on-tertiary: #{mat.get-theme-color($dark-theme, on-tertiary)};
+    --mat-sys-tertiary-contain: #{mat.get-theme-color($light-theme,tertiary-container)};
+    --mat-sys-on-tertiary-contain: #{mat.get-theme-color($light-theme,on-tertiary-container)};
+
+    --mat-sys-secondary: #{mat.get-theme-color($dark-theme, secondary)};
+    --mat-sys-on-secondary: #{mat.get-theme-color($dark-theme, on-secondary)};
+    --mat-sys-secondary-container: #{mat.get-theme-color($dark-theme, secondary-container)};
+    --mat-sys-on-secondary-container: #{mat.get-theme-color($dark-theme, on-secondary-container)};
+
+    --mat-sys-surface: #{mat.get-theme-color($dark-theme, surface)};
+    --mat-sys-on-surface: #{mat.get-theme-color($dark-theme, on-surface)};
+    --mat-sys-surface-variant: #{mat.get-theme-color($dark-theme, surface-variant)};
+    --mat-sys-on-surface-variant: #{mat.get-theme-color($dark-theme, on-surface-variant)};
+
+    --mat-sys-outline: #{mat.get-theme-color($dark-theme, outline)};
+    --mat-sys-outline-variant: #{mat.get-theme-color($dark-theme, outline-variant)};
+
+    --mat-sys-background: #{mat.get-theme-color($dark-theme, surface)};
+    --mat-sys-error: #{mat.get-theme-color($dark-theme, error)};
+    --mat-sys-on-error: #{mat.get-theme-color($dark-theme, on-error)};
+    --mat-sys-error-container: #{mat.get-theme-color($dark-theme, error-container)};
+    --mat-sys-on-error-container: #{mat.get-theme-color($dark-theme, on-error-container)};
+
+    --mat-sys-surface-container: #{mat.get-theme-color($dark-theme, surface-container)};
+    --mat-sys-surface-container-high: #{mat.get-theme-color($dark-theme, surface-container-high)};
+    --mat-sys-surface-container-highest: #{mat.get-theme-color($dark-theme, surface-container-highest)};
+    --mat-sys-surface-container-low: #{mat.get-theme-color($dark-theme, surface-container-low)};
+    --mat-sys-surface-container-lowest: #{mat.get-theme-color($dark-theme, surface-container-lowest)};
+    --mat-sys-inverse-surface: #{mat.get-theme-color($dark-theme, inverse-surface)};
+    --mat-sys-on-inverse-surface: #{mat.get-theme-color($dark-theme, inverse-on-surface)};
+
+
+}
+
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    --mat-sys-body-medium-line-height: 1.25rem;
+    --mat-sys-body-medium-size: 0.875rem;
+    --mat-sys-body-medium-tracking: 0.016rem;
+    --mat-sys-body-medium-weight: 400;
+    background-color: var(--mat-sys-surface-container-low);
+    color: var(--mat-sys-on-surface);
+}

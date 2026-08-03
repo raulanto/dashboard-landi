@@ -20,7 +20,8 @@
       "@core/*": ["src/app/core/*"],
       "@shared/*": ["src/app/shared/*"],
       "@env/*": ["src/environments/*"],
-      "@components/*": ["src/app/components/*"]
+      "@components/*": ["src/app/components/*"],
+      "nombre": ["./dist/nombre"]
     }
   },
   "angularCompilerOptions": {
@@ -35,6 +36,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/nombre/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/nombre/tsconfig.spec.json"
     }
   ]
 }
