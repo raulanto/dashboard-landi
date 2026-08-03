@@ -7,7 +7,7 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   // Using signals for reactive state
@@ -17,7 +17,7 @@ export class AuthService {
   // Expose read-only signals
   public readonly currentUser = this._currentUser.asReadonly();
   public readonly token = this._token.asReadonly();
-  
+
   public readonly isAuthenticated = computed(() => !!this._token());
 
   constructor() {
@@ -25,7 +25,6 @@ export class AuthService {
     const storedToken = localStorage.getItem('auth_token');
     if (storedToken) {
       this._token.set(storedToken);
-      // In a real app, you might want to fetch user details using the token here
       this._currentUser.set({ id: '1', email: 'test@example.com', name: 'Test User' });
     }
   }
@@ -36,10 +35,10 @@ export class AuthService {
       setTimeout(() => {
         if (email && password) {
           const fakeToken = 'mock-jwt-token-' + Math.random().toString(36).substring(7);
-          
+
           this._token.set(fakeToken);
           this._currentUser.set({ id: '1', email, name: 'Test User' });
-          
+
           localStorage.setItem('auth_token', fakeToken);
           resolve(true);
         } else {

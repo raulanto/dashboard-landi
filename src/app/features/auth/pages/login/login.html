@@ -6,10 +6,10 @@
 
     <mat-card-content>
       @if (errorMessage()) {
-        <div class="error-banner">
-          <mat-icon>error_outline</mat-icon>
-          <span>{{ errorMessage() }}</span>
-        </div>
+      <div class="error-banner">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
       }
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 mt-10">
@@ -18,12 +18,12 @@
             <mat-label>Correo</mat-label>
             <input matInput formControlName="email" type="email" placeholder="Email address" />
             @if (
-              loginForm.controls.email.hasError('required') && loginForm.controls.email.touched
+            loginForm.controls.email.hasError('required') && loginForm.controls.email.touched
             ) {
-              <mat-error>Correo es requerido</mat-error>
+            <mat-error>Correo es requerido</mat-error>
             }
             @if (loginForm.controls.email.hasError('email') && loginForm.controls.email.touched) {
-              <mat-error>Ingrese un correo valido</mat-error>
+            <mat-error>Ingrese un correo valido</mat-error>
             }
           </mat-form-field>
         </div>
@@ -31,41 +31,33 @@
         <div class="field-container">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Contraseña</mat-label>
-            <input
-              matInput
-              formControlName="password"
-              [type]="hidePassword() ? 'password' : 'text'"
-              placeholder="Password"
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              (click)="togglePasswordVisibility($event)"
-              [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hidePassword()"
-            >
+            <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
+              placeholder="Password" />
+            <button mat-icon-button matSuffix (click)="togglePasswordVisibility($event)"
+              [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword()">
               <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
             @if (
-              loginForm.controls.password.hasError('required') &&
-              loginForm.controls.password.touched
+            loginForm.controls.password.hasError('required') &&
+            loginForm.controls.password.touched
             ) {
-              <mat-error>La contraseña es requerida</mat-error>
+            <mat-error>La contraseña es requerida</mat-error>
             }
             @if (
-              loginForm.controls.password.hasError('minlength') &&
-              loginForm.controls.password.touched
+            loginForm.controls.password.hasError('minlength') &&
+            loginForm.controls.password.touched
             ) {
-              <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
+            <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
             }
           </mat-form-field>
         </div>
 
-        <button mat-flat-button color="primary" type="submit" class="w-full" [disabled]="loading()">
+        <button mat-flat-button matButton="outlined" color="primary" type="submit" class="w-full"
+          [disabled]="loading()">
           @if (loading()) {
-            <mat-spinner diameter="24"></mat-spinner>
+          <mat-spinner diameter="24"></mat-spinner>
           } @else {
-            Iniciar sesion
+          Iniciar sesion
           }
         </button>
       </form>
