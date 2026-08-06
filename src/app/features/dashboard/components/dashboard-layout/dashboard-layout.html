@@ -1,220 +1,22 @@
 <app-dashboard-layout class="container-color">
-  <!-- Sidenav Header -->
   <div sidenav-header>
-    <div
-      class="profile-card-reference"
-      [matMenuTriggerFor]="userMenu"
-      [class.collapsed-profile]="!sidenavService.isExpanded()"
-    >
-      <div
-        class="profile-avatar-box"
-      >
-        <span>{{ user?.P_NOMBRE ? user.P_NOMBRE.charAt(0) : 'A' }}</span>
-      </div>
-      @if (sidenavService.isExpanded()) {
-        <div class="profile-details">
-          <div
-            class="profile-name"
-            [title]="(user?.P_NOMBRE || '') + ' ' + (user?.P_AP_PATERNO || '')"
-          >
-            {{ user?.P_NOMBRE || 'Analista' }} {{ user?.P_AP_PATERNO || '' }}
-          </div>
-          <div class="profile-role">{{ userRoleName }}</div>
-        </div>
-        <div class="profile-expand">
-          <mat-icon>expand_more</mat-icon>
-        </div>
-      }
-    </div>
-
-    <mat-menu #userMenu="matMenu" xPosition="after">
-      <!-- Future Profile Link -->
-      <!-- <button mat-menu-item routerLink="/analista/perfil">
-        <mat-icon>person</mat-icon>
-        <span>Mi Perfil</span>
-      </button> -->
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span>Cerrar Sesión</span>
-      </button>
-    </mat-menu>
+    
   </div>
 
   <span toolbar-title class="toolbar-page-title">
     {{ pageTitle }}
   </span>
 
-  <mat-nav-list sidenav-nav class="premium-nav-list">
-    <a
-      mat-list-item
-      routerLink="/analista/home"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Inicio' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>home</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Inicio</span>
-      }
-    </a>
-
-    <a
-      mat-list-item
-      routerLink="/analista/lista-prospectos"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Lista Prospectos' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>assignment</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Lista Prospectos</span>
-      }
-    </a>
-
-    <a
-      mat-list-item
-      routerLink="/analista/create-prospect"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Nuevo Prospecto' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>add_circle_outline</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Nuevo Prospecto</span>
-      }
-    </a>
-
-    <a
-      mat-list-item
-      routerLink="/analista/renovacion"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Renovación' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>autorenew</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Renovación</span>
-      }
-    </a>
-
-    @if (sidenavService.isExpanded()) {
-      <div class="nav-section-header">PROCESOS</div>
-    } @else {
-      <mat-divider class="nav-collapsed-divider"></mat-divider>
-    }
-    <a
-      mat-list-item
-      routerLink="/analista/generar-tramite"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Generar Trámite' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>post_add</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Generar Trámite</span>
-      }
-    </a>
-
-    <a
-      mat-list-item
-      routerLink="/analista/reporte-actual"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Reporte de Trámites' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>description</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Reporte de Trámites</span>
-      }
-    </a>
-
-    @if (sidenavService.isExpanded()) {
-      <div class="nav-section-header">TRAMITES</div>
-    } @else {
-      <mat-divider class="nav-collapsed-divider"></mat-divider>
-    }
-    <a
-      mat-list-item
-      routerLink="/analista/tramites-cancelados"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Trámites Cancelados y Finalizados' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>cancel</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Cancelados y Finalizados</span>
-      }
-    </a>
-
-    @if (sidenavService.isExpanded()) {
-      <div class="nav-section-header">GUÍAS</div>
-    } @else {
-      <mat-divider class="nav-collapsed-divider"></mat-divider>
-    }
-
-    <a
-      mat-list-item
-      routerLink="/analista/guia-proceso"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Guía del Proceso' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>menu_book</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Guía del Proceso</span>
-      }
-    </a>
-
-    <a
-      mat-list-item
-      routerLink="/analista/guia-edicion"
-      routerLinkActive="active"
-      [matTooltip]="!sidenavService.isExpanded() ? 'Guía de Edición' : ''"
-      matTooltipPosition="right"
-      [class.collapsed-item]="!sidenavService.isExpanded()"
-    >
-      <mat-icon matListItemIcon>edit_note</mat-icon>
-      @if (sidenavService.isExpanded()) {
-        <span matListItemTitle>Guía de Edición</span>
-      }
-    </a>
-  </mat-nav-list>
-
-  <div sidenav-footer>
-    @if (sidenavService.isExpanded()) {
-      <button mat-button color="warn" class="w-full" (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        Cerrar Sesión
-      </button>
-    } @else {
-      <button
-        mat-icon-button
-        (click)="logout()"
-        matTooltip="Cerrar Sesión"
-        matTooltipPosition="right"
-        class="collapsed-logout-btn"
-      >
-        <mat-icon>logout</mat-icon>
-      </button>
-    }
+  <div sidenav-nav>
+    <app-nav-menu [sections]="navSections"></app-nav-menu>
   </div>
 
-  <div toolbar-actions class="container-color">
-    <button
-      mat-icon-button
-      (click)="themeService.toggleTheme()"
-      [matTooltip]="themeService.darkMode() ? 'Modo Claro' : 'Modo Oscuro'"
-    >
-      <mat-icon>{{ themeService.darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-    </button>
+  <div sidenav-footer>
+    <app-profile-card [user]="user"></app-profile-card>
+  </div>
+
+  <div toolbar-actions class="toolbar-actions-container">
+    <app-dark-btn></app-dark-btn>
     <button mat-icon-button>
       <mat-icon>notifications</mat-icon>
     </button>
@@ -237,7 +39,6 @@
       </mat-sidenav>
 
       <mat-sidenav-content>
-        <!-- <img src="fincreadd.png" alt="" class="bg-brand-img" aria-hidden="true"> -->
         <div class="content-padding">
           <router-outlet></router-outlet>
         </div>
