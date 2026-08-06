@@ -38,7 +38,6 @@ export interface NavSection {
 export class NavMenuComponent {
   public sidenavService = inject(SidenavService);
 
-  // Use signal for sections
   sections = input<NavSection[]>([]);
 
   toggleSection(section: NavSection) {

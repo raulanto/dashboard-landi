@@ -61,12 +61,11 @@ export class DashboardLayout {
       ]
     },
     {
-      title: 'Recientes',
+      title: 'Herramientas',
       collapsible: true,
       expanded: false,
       items: [
-        { path: '/analista/reciente1', icon: 'history', label: 'Python data science' },
-        { path: '/analista/reciente2', icon: 'history', label: 'Angular avanzado' }
+        { path: '/dashboard/view-tables', icon: 'table_view', label: 'Tablas' },
       ]
     }
   ];

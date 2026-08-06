@@ -1,10 +1,36 @@
 <!-- <app-page-header title="El Título de la Página"></app-page-header> -->
 
+<div class="">
+    <div class="mb-6  w-full sticky top-0 z-10">
+        <app-pill-tabs 
+            [tabs]="tabs" 
+            [(activeTabId)]="activeTab"
+            align="start">
+        </app-pill-tabs>
+    </div>
+
+    <div class="p-5 text-6xl font-light">
+        Elemtos y Componentes
+    </div>
+    <mat-divider/>
+    <div class="mt-8 p-6  rounded-2xl">
+        @switch (activeTab()) {
+            @case ('specimen') {
+                <div>Specimen content goes here</div>
+            }
+            @case ('about') {
+                <div>About content goes here</div>
+            }
+            @case ('license') {
+                <div>License content goes here</div>
+            }
+            @case ('glyphs') {
+                <div>Glyphs & languages content goes here</div>
+            }
+        }
+    </div>
 
 
-
-<div class="p-5 text-xl">
-    Este es un div de ejemplo con clase semántica
+    
 </div>
-
 
