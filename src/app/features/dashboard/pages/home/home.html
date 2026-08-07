@@ -1,36 +1,49 @@
 <!-- <app-page-header title="El Título de la Página"></app-page-header> -->
 
 <div class="">
-    <div class="mb-6  w-full sticky top-0 z-10">
-        <app-pill-tabs 
-            [tabs]="tabs" 
-            [(activeTabId)]="activeTab"
-            align="start">
-        </app-pill-tabs>
-    </div>
+  <div class="mb-6 w-full sticky top-0 z-10">
+    <app-pill-tabs [tabs]="tabs" [(activeTabId)]="activeTab" align="start"> </app-pill-tabs>
+  </div>
 
-    <div class="p-5 text-6xl font-light">
-        Elemtos y Componentes
-    </div>
-    <mat-divider/>
-    <div class="mt-8 p-6  rounded-2xl">
-        @switch (activeTab()) {
-            @case ('specimen') {
-                <div>Specimen content goes here</div>
-            }
-            @case ('about') {
-                <div>About content goes here</div>
-            }
-            @case ('license') {
-                <div>License content goes here</div>
-            }
-            @case ('glyphs') {
-                <div>Glyphs & languages content goes here</div>
-            }
-        }
-    </div>
+  <div class="p-5 text-6xl font-light">Elemtos y Componentes</div>
+  <mat-divider />
+  <div class="mt-8 p-6 rounded-2xl">
+    @switch (activeTab()) {
+      @case ('specimen') {
+        <button appButton variant="filled" color="primary">Guardar</button>
+
+        <button appButton variant="tonal" color="success" icon="check_circle">
+          Aprobar estimación
+        </button>
+
+        <button appButton variant="outlined" color="error" size="md">Cancelar</button>
+
+        <button appButton variant="text" color="info">Guardar cambios</button>
+
+        <a appButton variant="elevated" color="secondary" routerLink="/reportes"> Ver reportes </a>
+
+        <button appButton variant="tonal" color="warning">Guardar cambios</button>
+      }
+      @case ('about') {
+        <div>About content goes here</div>
+      }
+      @case ('license') {
+        <div>License content goes here</div>
+      }
+      @case ('glyphs') {
+        <div>Glyphs & languages content goes here</div>
+      }
+    }
+  </div>
 
 
-    
+  <!-- Pill normal -->
+<app-badge color="success" variant="tonal" icon="check_circle">
+  Aprobado
+</app-badge>
+
+<app-badge color="warning" variant="outlined" size="lg">Pendiente</app-badge>
+<app-badge color="error" variant="outlined">Pendiente</app-badge>
+
+
 </div>
-

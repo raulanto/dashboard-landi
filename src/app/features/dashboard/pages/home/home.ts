@@ -3,9 +3,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { PillTabs, TabItem } from '@shared/components/pill-tabs/pill-tabs';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
+
+import { AppButtonComponent, AppBadgeComponent } from '@shared/ui';
+
+
 @Component({
   selector: 'app-home',
-  imports: [MatGridListModule, PillTabs,MatDividerModule,MatIcon],
+  imports: [MatGridListModule, PillTabs, MatDividerModule, AppButtonComponent, AppBadgeComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
