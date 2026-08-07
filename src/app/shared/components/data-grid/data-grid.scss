@@ -93,11 +93,27 @@
 }
 
 .grid-cell.selected {
-  background-color: rgba(var(--mat-sys-primary-rgb, 103, 80, 164), 0.15);
+  background-color: color-mix(in srgb, var(--mat-sys-primary) 15%, transparent) !important;
 }
 
 .grid-cell.active {
-  background-color: rgba(var(--mat-sys-primary-rgb, 103, 80, 164), 0.25);
+  background-color: color-mix(in srgb, var(--mat-sys-primary) 25%, transparent) !important;
   border: 2px solid var(--mat-sys-primary);
   padding: 6px 14px; 
+}
+
+.grid-cell.has-heatmap {
+  background-color: var(--heatmap-bg);
+  /* The heatmap color is always a bright pastel, so force dark text for readability */
+  color: #1a1a1a; 
+}
+
+/* Ensure selections override heatmap */
+.grid-cell.has-heatmap.selected {
+  background-color: color-mix(in srgb, var(--mat-sys-primary) 40%, var(--heatmap-bg)) !important;
+  color: inherit;
+}
+.grid-cell.has-heatmap.active {
+  background-color: var(--mat-sys-primary-container) !important;
+  color: var(--mat-sys-on-primary-container) !important;
 }

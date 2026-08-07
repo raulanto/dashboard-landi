@@ -16,6 +16,8 @@ import { ThemeService } from '@core/services/theme.service';
 import { AuthService } from '@core/services/auth.service';
 import { SidenavService } from '@shared/services/sidenav.service';
 import { AnalistaSidenavService } from '@shared/services/analista-sidenav.service';
+import { GlobalSidenavService } from '@shared/services/global-sidenav.service';
+import { PortalModule } from '@angular/cdk/portal';
 
 import {DarkBtn} from '@shared/components/dark-btn/dark-btn'
 
@@ -33,6 +35,7 @@ import {DarkBtn} from '@shared/components/dark-btn/dark-btn'
     MatButtonModule,
     MatTooltipModule,
     MatSidenavModule,
+    PortalModule,
     DarkBtn
   ],
   templateUrl: './dashboard-layout.html',
@@ -43,6 +46,7 @@ export class DashboardLayout {
   public authService = inject(AuthService);
   public sidenavService = inject(SidenavService);
   public analistaSidenavService = inject(AnalistaSidenavService);
+  public globalSidenav = inject(GlobalSidenavService);
   
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);

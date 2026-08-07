@@ -1,0 +1,52 @@
+<h2 mat-dialog-title style="color: var(--mat-sys-on-surface);">Configuración de Mapa de Calor</h2>
+<mat-dialog-content>
+  <p class="mb-4" style="color: var(--mat-sys-on-surface-variant); margin-bottom: 24px;">
+    Habilita el mapa de calor en las columnas numéricas o de fechas para visualizar una escala de colores basada en sus valores.
+  </p>
+
+  <div class="flex flex-col gap-4" style="display: flex; flex-direction: column; gap: 16px;">
+    @for (col of data.columns; track col) {
+      <div 
+        class="flex flex-col p-4 rounded-lg gap-3" 
+        style="display: flex; flex-direction: column; padding: 16px; border-radius: 12px; gap: 12px; border: 1px solid var(--mat-sys-outline-variant);"
+        [style.background-color]="getConfig(col)?.enabled ? 'var(--mat-sys-surface-container-high)' : 'var(--mat-sys-surface-container-lowest)'">
+        
+        <div class="flex items-center justify-between" style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-weight: 500; color: var(--mat-sys-on-surface);">{{ col }}</span>
+          <mat-slide-toggle 
+            [checked]="getConfig(col)?.enabled"
+            (change)="toggleColumn(col)">
+            Habilitar
+          </mat-slide-toggle>
+        </div>
+
+        @if (getConfig(col)?.enabled) {
+          <div class="flex gap-4 items-center" style="display: flex; gap: 16px; margin-top: 8px;">
+            <mat-form-field appearance="outline" style="flex: 1;">
+              <mat-label>Dirección del Color</mat-label>
+              <mat-select 
+                [ngModel]="getConfig(col)?.direction" 
+                (ngModelChange)="updateConfig(col, {direction: $event})">
+                <mat-option value="asc">Menor = Rojo, Mayor = Verde</mat-option>
+                <mat-option value="desc">Menor = Verde, Mayor = Rojo</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="flex: 1;">
+              <mat-label>Tipo de Dato</mat-label>
+              <mat-select 
+                [ngModel]="getConfig(col)?.dataType" 
+                (ngModelChange)="updateConfig(col, {dataType: $event})">
+                <mat-option value="number">Número</mat-option>
+                <mat-option value="date">Fecha</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Listo</button>
+</mat-dialog-actions>

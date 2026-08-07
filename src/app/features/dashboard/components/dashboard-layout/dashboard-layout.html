@@ -23,7 +23,7 @@
   </div>
 
   <div class="dashboard-demo-content">
-    <mat-sidenav-container class="analista-sidenav-container" hasBackdrop="true">
+    <mat-sidenav-container class="analista-sidenav-container" [hasBackdrop]="analistaSidenavService.isOpen()">
       <mat-sidenav
         #sidenav
         position="end"
@@ -36,6 +36,18 @@
         class="prospecto-sidenav"
         style="z-index: 1000"
       >
+      </mat-sidenav>
+
+      <mat-sidenav
+        #globalLeftSidenav
+        position="start"
+        [opened]="globalSidenav.isOpen()"
+        (closed)="globalSidenav.close()"
+        mode="side"
+        class="global-left-sidenav"
+        style="width: 320px; background: var(--mat-sys-surface); border-right: 1px solid var(--mat-sys-outline-variant);"
+      >
+        <ng-template [cdkPortalOutlet]="globalSidenav.portalContent()"></ng-template>
       </mat-sidenav>
 
       <mat-sidenav-content>

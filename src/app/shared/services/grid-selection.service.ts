@@ -8,35 +8,17 @@ export class GridSelectionService {
   readonly isDragging = signal<boolean>(false);
   readonly isRowSelectionMode = signal<boolean>(false);
 
-  // Derives a set of selected cell keys for fast O(1) lookups in the template
-  readonly selectedCellsSet = computed(() => {
-    const range = this.selectionRange();
-    const set = new Set<string>();
-    
-    if (!range) {
-      const active = this.activeCell();
-      if (active) {
-        set.add(`${active.rowIndex},${active.colIndex}`);
-      }
-      return set;
-    }
-
-    const minRow = Math.min(range.startRow, range.endRow);
-    const maxRow = Math.max(range.startRow, range.endRow);
-    const minCol = Math.min(range.startCol, range.endCol);
-    const maxCol = Math.max(range.startCol, range.endCol);
-
-    for (let r = minRow; r <= maxRow; r++) {
-      for (let c = minCol; c <= maxCol; c++) {
-        set.add(`${r},${c}`);
-      }
-    }
-    
-    return set;
-  });
-
   isSelected(rowIndex: number, colIndex: number): boolean {
-    return this.selectedCellsSet().has(`${rowIndex},${colIndex}`);
+    const range = this.selectionRange();
+    if (range) {
+      const minRow = Math.min(range.startRow, range.endRow);
+      const maxRow = Math.max(range.startRow, range.endRow);
+      const minCol = Math.min(range.startCol, range.endCol);
+      const maxCol = Math.max(range.startCol, range.endCol);
+      return rowIndex >= minRow && rowIndex <= maxRow && colIndex >= minCol && colIndex <= maxCol;
+    }
+    const active = this.activeCell();
+    return active?.rowIndex === rowIndex && active?.colIndex === colIndex;
   }
 
   isActive(rowIndex: number, colIndex: number): boolean {

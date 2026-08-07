@@ -1,15 +1,15 @@
-import { Component, input, computed, inject } from '@angular/core';
+import { Component, input, computed, inject, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GridSelectionService } from '../../services/grid-selection.service';
+import { GridHeatmapService } from '../../services/grid-heatmap.service';
 
 @Component({
   selector: 'app-data-grid',
   imports: [CommonModule, ScrollingModule],
   providers: [GridSelectionService],
   host: {
-    '(window:mouseup)': 'onMouseUp()',
-    '(window:mousemove)': 'onWindowMouseMove($event)'
+    // Eventos globales movidos a ngZone para evitar Change Detection infinito
   },
   template: `
     <div class="grid-container" (keydown)="onKeyDown($event)" tabindex="0" role="grid">
@@ -38,6 +38,8 @@ import { GridSelectionService } from '../../services/grid-selection.service';
               class="grid-cell"
               [class.selected]="selectionService.isSelected(rowIndex, colIndex)"
               [class.active]="selectionService.isActive(rowIndex, colIndex)"
+              [class.has-heatmap]="heatmapService.getColor(col, row[col]) !== ''"
+              [style.--heatmap-bg]="heatmapService.getColor(col, row[col])"
               (mousedown)="onMouseDown(rowIndex, colIndex, $event)"
               (mouseenter)="onMouseEnter(rowIndex, colIndex)"
               [title]="row[col]"
@@ -57,6 +59,23 @@ export class DataGridComponent {
   data = input.required<any[]>();
   
   selectionService = inject(GridSelectionService);
+  heatmapService = inject(GridHeatmapService);
+  private ngZone = inject(NgZone);
+
+  private boundMouseMove = this.onWindowMouseMove.bind(this);
+  private boundMouseUp = this.onMouseUp.bind(this);
+
+  ngOnInit() {
+    this.ngZone.runOutsideAngular(() => {
+      window.addEventListener('mousemove', this.boundMouseMove);
+      window.addEventListener('mouseup', this.boundMouseUp);
+    });
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('mousemove', this.boundMouseMove);
+    window.removeEventListener('mouseup', this.boundMouseUp);
+  }
 
   gridColumns = computed(() => {
     // Usamos anchos fijos estrictos (180px) para garantizar que los encabezados
