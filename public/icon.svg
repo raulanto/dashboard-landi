@@ -3,7 +3,7 @@
   <defs>
     <style>
       .cls-1 {
-        fill: var(--mat-sys-primary);
+        fill: #5B9AFF;
       }
     </style>
   </defs>

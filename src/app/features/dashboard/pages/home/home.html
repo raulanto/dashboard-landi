@@ -9,41 +9,108 @@
   <mat-divider />
   <div class="mt-8 p-6 rounded-2xl">
     @switch (activeTab()) {
-      @case ('specimen') {
-        <button appButton variant="filled" color="primary">Guardar</button>
-
-        <button appButton variant="tonal" color="success" icon="check_circle">
-          Aprobar estimación
-        </button>
-
-        <button appButton variant="outlined" color="error" size="md">Cancelar</button>
-
-        <button appButton variant="text" color="info">Guardar cambios</button>
-
-        <a appButton variant="elevated" color="secondary" routerLink="/reportes"> Ver reportes </a>
-
-        <button appButton variant="tonal" color="warning">Guardar cambios</button>
+      @case ('buttons') {
+        <div class="flex flex-wrap gap-4 items-center mt-4">
+          <button appButton variant="filled" color="primary">Guardar</button>
+          <button appButton variant="tonal" color="success" icon="check_circle">
+            Aprobar estimación
+          </button>
+          <button appButton variant="outlined" color="error" size="md">Cancelar</button>
+          <button appButton variant="text" color="info">Guardar cambios</button>
+          <a appButton variant="elevated" color="secondary" routerLink="/reportes"> Ver reportes </a>
+          <button appButton variant="tonal" color="warning">Guardar cambios</button>
+        </div>
       }
-      @case ('about') {
-        <div>About content goes here</div>
+      
+      @case ('inputs') {
+        <div class="w-[400px] mt-8 flex flex-col gap-4">
+          <!-- Básico -->
+          <app-input label="Correo" type="email" size="xs" />
+
+          <!-- Con ícono, contraseña con toggle de visibilidad -->
+          <app-input
+            label="Contraseña"
+            type="password"
+            prefixIcon="lock"
+          />
+
+          <!-- Buscador con botón de limpiar -->
+          <app-input label="Buscar obra" prefixIcon="search" [clearable]="true" />
+
+          <!-- Multilínea con autosize -->
+          <app-input
+            label="Notas de la estimación"
+            [multiline]="true"
+            [rows]="3"
+          />
+
+          <!-- Contador de caracteres -->
+          <app-input label="Concepto" [maxLength]="80" />
+
+          <!-- Variante filled -->
+          <app-input label="Folio" variant="filled" color="secondary" />
+        </div>
       }
-      @case ('license') {
-        <div>License content goes here</div>
+      
+      @case ('badges') {
+        <div class="flex flex-wrap gap-4 items-center mt-4">
+          <app-badge color="success" variant="tonal" icon="check_circle"> Aprobado </app-badge>
+          <app-badge color="warning" variant="outlined" size="lg">Pendiente</app-badge>
+          <app-badge color="error" variant="outlined">Rechazado</app-badge>
+          <app-badge color="info" variant="filled" size="xs">Nuevo</app-badge>
+        </div>
       }
-      @case ('glyphs') {
-        <div>Glyphs & languages content goes here</div>
+      
+      @case ('cards') {
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+          <app-card variant="elevated" color="surface">
+            <h3 class="text-xl font-medium mb-2">Elevated Card</h3>
+            <p class="text-gray-600 dark:text-gray-400">Esta es una tarjeta elevada estándar, ideal para contenido principal y acciones destacadas.</p>
+          </app-card>
+          
+          <app-card variant="filled" color="secondary">
+            <h3 class="text-xl font-medium mb-2">Filled Card</h3>
+            <p>Tarjeta con fondo sólido (secondary container), útil para agrupar elementos secundarios.</p>
+          </app-card>
+          
+          <app-card variant="outlined" color="primary">
+            <h3 class="text-xl font-medium mb-2">Outlined Card</h3>
+            <p>Tarjeta con borde (primary), sin elevación base. Útil para listas o galerías.</p>
+          </app-card>
+          
+          <app-card variant="elevated" color="error">
+            <h3 class="text-xl font-medium mb-2">Error Card</h3>
+            <p>Tarjeta de alerta o estado crítico.</p>
+          </app-card>
+        </div>
+      }
+      
+      @case ('selects') {
+        <div class="w-[400px] mt-8 flex flex-col gap-4">
+          <!-- Outlined -->
+          <app-select 
+            label="Selecciona un rol" 
+            [options]="[{label: 'Administrador', value: 'admin'}, {label: 'Usuario', value: 'user'}]" 
+            prefixIcon="person"
+          />
+          
+          <!-- Filled -->
+          <app-select 
+            label="Estado" 
+            variant="filled"
+            color="success"
+            [options]="[{label: 'Activo', value: 'active'}, {label: 'Inactivo', value: 'inactive'}]" 
+          />
+          
+          <!-- Tamaño small -->
+          <app-select 
+            label="Filtro rápido" 
+            size="sm"
+            [options]="[{label: 'Hoy', value: '1'}, {label: 'Ayer', value: '2'}]" 
+          />
+        </div>
       }
     }
   </div>
-
-
-  <!-- Pill normal -->
-<app-badge color="success" variant="tonal" icon="check_circle">
-  Aprobado
-</app-badge>
-
-<app-badge color="warning" variant="outlined" size="lg">Pendiente</app-badge>
-<app-badge color="error" variant="outlined">Pendiente</app-badge>
-
 
 </div>
