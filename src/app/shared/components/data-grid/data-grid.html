@@ -23,18 +23,20 @@
 >
   <div class="grid-scroll-wrapper">
     <!-- Headers -->
-    <div class="grid-header" [style.grid-template-columns]="gridColumns()">
+    <div
+      class="grid-header"
+      [style.grid-template-columns]="gridColumns()"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="onColumnDrop($event)"
+    >
       <div class="grid-header-cell index-header" role="columnheader">#</div>
       @for (col of displayedColumns(); track col) {
         <div
           class="grid-header-cell"
           role="columnheader"
-          style="
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          "
+          cdkDrag
+          style="cursor: grab; display: flex; align-items: center; justify-content: space-between"
           (click)="sortBy(col)"
         >
           {{ col }}

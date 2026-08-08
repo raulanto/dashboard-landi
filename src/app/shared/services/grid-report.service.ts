@@ -9,6 +9,7 @@ export class GridReportService {
 
   generateReport(
     allColumns: string[],
+    orderedColumns: string[],
     hiddenColumns: string[],
     sortColumn: string | null,
     sortDirection: string | null,
@@ -43,7 +44,8 @@ export class GridReportService {
       schema: {
         totalColumns: allColumns.length,
         allColumns: allColumns,
-        visibleColumns: allColumns.filter((c) => !hiddenColumns.includes(c)),
+        orderedColumns: orderedColumns,
+        visibleColumns: orderedColumns.filter((c) => !hiddenColumns.includes(c)),
         hiddenColumns: hiddenColumns,
       },
       sort: {

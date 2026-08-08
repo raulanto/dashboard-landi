@@ -1,4 +1,4 @@
-import { Component, input, computed, inject, NgZone, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, input, computed, inject, NgZone, OnDestroy, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GridSelectionService } from '../../services/grid-selection.service';
@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CdkDragDrop, moveItemInArray, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 
 
@@ -30,7 +31,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
  */
 @Component({
   selector: 'app-data-grid',
-  imports: [CommonModule, ScrollingModule, MatMenuModule, MatButtonModule, MatIconModule, MatCheckboxModule],
+  imports: [CommonModule, ScrollingModule, MatMenuModule, MatButtonModule, MatIconModule, MatCheckboxModule, CdkDropList, CdkDrag],
   providers: [GridSelectionService],
   templateUrl: './data-grid.html',
   styleUrls: ['./data-grid.scss']
@@ -48,10 +49,35 @@ export class DataGridComponent {
   sortColumn = signal<string | null>(null);
   sortDirection = signal<'asc' | 'desc'>('asc');
 
+  orderedColumns = signal<string[]>([]);
+
+  constructor() {
+    effect(() => {
+      const inputCols = this.columns();
+      const current = this.orderedColumns();
+      if (current.length === 0 || current.length !== inputCols.length) {
+         this.orderedColumns.set([...inputCols]);
+      }
+    }, { allowSignalWrites: true });
+  }
+
   displayedColumns = computed(() => {
     const hidden = this.hiddenColumns();
-    return this.columns().filter(col => !hidden.has(col));
+    return this.orderedColumns().filter(col => !hidden.has(col));
   });
+
+  onColumnDrop(event: CdkDragDrop<string[]>) {
+    const cols = [...this.orderedColumns()];
+    const displayed = this.displayedColumns();
+    const prevCol = displayed[event.previousIndex];
+    const currCol = displayed[event.currentIndex];
+    
+    const prevIndexInOrdered = cols.indexOf(prevCol);
+    const currIndexInOrdered = cols.indexOf(currCol);
+    
+    moveItemInArray(cols, prevIndexInOrdered, currIndexInOrdered);
+    this.orderedColumns.set(cols);
+  }
 
   sortedData = computed(() => {
     const col = this.sortColumn();

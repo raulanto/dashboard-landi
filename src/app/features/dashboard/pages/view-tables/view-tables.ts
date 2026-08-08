@@ -140,11 +140,13 @@ export class ViewTables implements AfterViewInit, OnDestroy {
   generateReport() {
     if (!this.dataGrid) return;
     const hidden = Array.from(this.dataGrid.hiddenColumns());
+    const ordered = this.dataGrid.orderedColumns();
     const sortCol = this.dataGrid.sortColumn();
     const sortDir = this.dataGrid.sortDirection();
     
     const report = this.reportService.generateReport(
       this.columns(),
+      ordered,
       hidden,
       sortCol,
       sortDir
