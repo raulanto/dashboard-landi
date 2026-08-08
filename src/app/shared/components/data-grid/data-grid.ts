@@ -8,82 +8,35 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
+
+
+/**
+ * @description Este componente es una tabla de datos con funcionalidades avanzadas como:
+ * - Selección de celdas
+ * - Selección de filas
+ * - Arrastrar para seleccionar
+ * - Teclas de navegación
+ * - Menú de columnas
+ * - Ordenamiento
+ * - Heatmaps
+ * 
+ * @example
+ * <app-data-grid
+ *   [columns]="columns()"
+ *   [data]="data()"
+ *   (selectionChange)="onSelectionChange($event)"
+ * ></app-data-grid>
+ * 
+ */
 @Component({
   selector: 'app-data-grid',
   imports: [CommonModule, ScrollingModule, MatMenuModule, MatButtonModule, MatIconModule, MatCheckboxModule],
   providers: [GridSelectionService],
-  host: {
-    // Eventos globales movidos a ngZone para evitar Change Detection infinito
-  },
-  template: `
-    <div style="margin-bottom: 8px; display: flex; justify-content: flex-end;">
-      <button mat-button [matMenuTriggerFor]="columnMenu" color="primary">
-        <mat-icon>view_column</mat-icon> Columnas
-      </button>
-      <mat-menu #columnMenu="matMenu">
-        <div class="p-0" (click)="$event.stopPropagation()">
-          @for (col of columns(); track col) {
-            <mat-checkbox 
-              [checked]="isColumnVisible(col)"
-              (change)="toggleColumn(col)">
-              {{ col }}
-            </mat-checkbox>
-            <br>
-          }
-        </div>
-      </mat-menu>
-    </div>
-
-    <div class="grid-container" (keydown)="onKeyDown($event)" tabindex="0" role="grid">
-      <div class="grid-scroll-wrapper">
-        <!-- Headers -->
-        <div class="grid-header" [style.grid-template-columns]="gridColumns()">
-          <div class="grid-header-cell index-header" role="columnheader">#</div>
-          @for (col of displayedColumns(); track col) {
-            <div class="grid-header-cell" role="columnheader" 
-                 style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;"
-                 (click)="sortBy(col)">
-              {{ col }}
-              @if (sortColumn() === col) {
-                <mat-icon style="font-size: 16px; width: 16px; height: 16px;">
-                  {{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
-                </mat-icon>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- Virtual Scroll Viewport for Data Rows -->
-        <cdk-virtual-scroll-viewport itemSize="36" class="viewport">
-        <div *cdkVirtualFor="let row of sortedData(); let rowIndex = index" class="grid-row" [style.grid-template-columns]="gridColumns()">
-          <div class="grid-cell index-cell" 
-               (mousedown)="startRowDrag(rowIndex, $event)"
-               (mouseenter)="onRowMouseEnter(rowIndex)"
-               role="gridcell">
-            {{ rowIndex + 1 }}
-          </div>
-          @for (col of displayedColumns(); track col; let colIndex = $index) {
-            <div 
-              class="grid-cell"
-              [class.selected]="selectionService.isSelected(rowIndex, colIndex)"
-              [class.active]="selectionService.isActive(rowIndex, colIndex)"
-              [class.has-heatmap]="heatmapService.getColor(col, row[col]) !== ''"
-              [style.--heatmap-bg]="heatmapService.getColor(col, row[col])"
-              (mousedown)="onMouseDown(rowIndex, colIndex, $event)"
-              (mouseenter)="onMouseEnter(rowIndex, colIndex)"
-              [title]="row[col]"
-              role="gridcell">
-              {{ row[col] }}
-            </div>
-          }
-        </div>
-      </cdk-virtual-scroll-viewport>
-      </div>
-    </div>
-  `,
+  templateUrl: './data-grid.html',
   styleUrls: ['./data-grid.scss']
 })
 export class DataGridComponent {
+  
   columns = input.required<string[]>();
   data = input.required<any[]>();
   
@@ -291,6 +244,45 @@ export class DataGridComponent {
       case 'Escape':
         this.selectionService.clearSelection();
         break;
+    }
+  }
+
+  onCopy(event: ClipboardEvent) {
+    const range = this.selectionService.selectionRange();
+    const active = this.selectionService.activeCell();
+    
+    let minRow, maxRow, minCol, maxCol;
+    
+    if (range) {
+      minRow = Math.min(range.startRow, range.endRow);
+      maxRow = Math.max(range.startRow, range.endRow);
+      minCol = Math.min(range.startCol, range.endCol);
+      maxCol = Math.max(range.startCol, range.endCol);
+    } else if (active) {
+      minRow = active.rowIndex;
+      maxRow = active.rowIndex;
+      minCol = active.colIndex;
+      maxCol = active.colIndex;
+    } else {
+      return;
+    }
+
+    const cols = this.displayedColumns();
+    const currentData = this.sortedData();
+    let textToCopy = '';
+
+    for (let r = minRow; r <= maxRow; r++) {
+      const row = currentData[r];
+      const rowData = [];
+      for (let c = minCol; c <= maxCol; c++) {
+        rowData.push(row[cols[c]]);
+      }
+      textToCopy += rowData.join('\t') + '\n';
+    }
+
+    if (event.clipboardData) {
+      event.clipboardData.setData('text/plain', textToCopy);
+      event.preventDefault(); // Prevents the browser from copying the HTML DOM
     }
   }
 }

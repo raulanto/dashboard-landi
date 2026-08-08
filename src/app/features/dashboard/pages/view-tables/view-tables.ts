@@ -16,6 +16,7 @@ import { GridFilterService } from '@shared/services/grid-filter.service';
 import { GridFiltersComponent } from '@shared/components/grid-filters/grid-filters';
 import { GlobalSidenavService } from '@shared/services/global-sidenav.service';
 import { ApiColumnMetadata } from '@shared/models/api.models';
+import { GridReportService } from '@shared/services/grid-report.service';
 
 @Component({
   selector: 'app-view-tables',
@@ -31,7 +32,7 @@ import { ApiColumnMetadata } from '@shared/models/api.models';
     DataGridComponent,
     GridFiltersComponent
   ],
-  providers: [GridHeatmapService],
+  providers: [GridHeatmapService, GridReportService],
   templateUrl: './view-tables.html',
   styleUrl: './view-tables.css',
 })
@@ -43,9 +44,11 @@ export class ViewTables implements AfterViewInit, OnDestroy {
   private dialog = inject(MatDialog);
   public globalSidenav = inject(GlobalSidenavService);
   private viewContainerRef = inject(ViewContainerRef);
+  private reportService = inject(GridReportService);
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('filtersPortalTemplate') filtersPortalTemplate!: TemplateRef<any>;
+  @ViewChild(DataGridComponent) dataGrid!: DataGridComponent;
 
   ngAfterViewInit() {
     if (this.filtersPortalTemplate) {
@@ -132,5 +135,22 @@ export class ViewTables implements AfterViewInit, OnDestroy {
         sampleData: this.tableData()[0]
       }
     });
+  }
+
+  generateReport() {
+    if (!this.dataGrid) return;
+    const hidden = Array.from(this.dataGrid.hiddenColumns());
+    const sortCol = this.dataGrid.sortColumn();
+    const sortDir = this.dataGrid.sortDirection();
+    
+    const report = this.reportService.generateReport(
+      this.columns(),
+      hidden,
+      sortCol,
+      sortDir
+    );
+
+    console.log("Reporte Generado:", report);
+    alert("Reporte generado con éxito. Revisa la consola para más detalles.\n\n" + JSON.stringify(report, null, 2));
   }
 }

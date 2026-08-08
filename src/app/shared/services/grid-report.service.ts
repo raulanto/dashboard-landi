@@ -1,0 +1,58 @@
+import { Injectable, inject } from '@angular/core';
+import { GridFilterService } from './grid-filter.service';
+import { GridHeatmapService } from './grid-heatmap.service';
+
+@Injectable()
+export class GridReportService {
+  private filterService = inject(GridFilterService);
+  private heatmapService = inject(GridHeatmapService);
+
+  generateReport(
+    allColumns: string[],
+    hiddenColumns: string[],
+    sortColumn: string | null,
+    sortDirection: string | null,
+  ) {
+    const filters = Array.from(this.filterService.filters().entries()).map(([col, filter]) => {
+      const result: any = {
+        column: col,
+        type: filter.type,
+      };
+
+      if (filter.type === 'text') {
+        result.values = filter.values;
+      } else if (filter.type === 'range') {
+        result.min = filter.min;
+        result.max = filter.max;
+      }
+
+      return result;
+    });
+
+    const heatmaps = Array.from(this.heatmapService.configs().entries())
+      .filter(([_, config]) => config.enabled)
+      .map(([col, config]) => {
+        return {
+          column: col,
+          direction: config.direction,
+          dataType: config.dataType,
+        };
+      });
+
+    return {
+      schema: {
+        totalColumns: allColumns.length,
+        allColumns: allColumns,
+        visibleColumns: allColumns.filter((c) => !hiddenColumns.includes(c)),
+        hiddenColumns: hiddenColumns,
+      },
+      sort: {
+        column: sortColumn,
+        direction: sortColumn ? sortDirection : null,
+      },
+      heatmaps: heatmaps,
+      filters: filters,
+      timestamp: new Date().toISOString(),
+    };
+  }
+}
