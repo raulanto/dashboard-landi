@@ -33,11 +33,17 @@ export class GridReportService {
     const heatmaps = Array.from(this.heatmapService.configs().entries())
       .filter(([_, config]) => config.enabled)
       .map(([col, config]) => {
-        return {
+        const result: any = {
           column: col,
           direction: config.direction,
           dataType: config.dataType,
         };
+
+        if (config.dataType === 'text' && config.textRules) {
+          result.textRules = config.textRules;
+        }
+
+        return result;
       });
 
     return {

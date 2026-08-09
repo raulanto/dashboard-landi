@@ -50,13 +50,18 @@ export class GridHeatmapService {
     this.configs.set(map);
   }
 
-  toggleConfig(colName: string, defaultType: 'number' | 'date' = 'number') {
+  toggleConfig(colName: string, defaultType: 'number' | 'date' | 'text' = 'number') {
     const map = new Map(this.configs());
     const existing = map.get(colName);
     if (existing) {
       map.set(colName, { ...existing, enabled: !existing.enabled });
     } else {
-      map.set(colName, { enabled: true, direction: 'asc', dataType: defaultType });
+      map.set(colName, { 
+        enabled: true, 
+        direction: 'asc', 
+        dataType: defaultType,
+        textRules: defaultType === 'text' ? [] : undefined
+      });
     }
     this.configs.set(map);
   }
@@ -65,10 +70,17 @@ export class GridHeatmapService {
     const config = this.configs().get(colName);
     if (!config || !config.enabled) return '';
     
+    if (rawValue === undefined || rawValue === null || rawValue === '') return '';
+
+    if (config.dataType === 'text') {
+      if (!config.textRules || config.textRules.length === 0) return '';
+      const textVal = String(rawValue).trim().toLowerCase();
+      const rule = config.textRules.find(r => (r.value || '').trim().toLowerCase() === textVal);
+      return rule ? rule.color : '';
+    }
+
     const stats = this.columnStats().get(colName);
     if (!stats || stats.min === stats.max) return '';
-
-    if (rawValue === undefined || rawValue === null || rawValue === '') return '';
 
     let numValue: number;
     if (config.dataType === 'date') {
