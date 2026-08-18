@@ -19,4 +19,10 @@ export class FileApiService {
     // Los interceptores se encargan del auth.
     return this.http.post<ApiUploadResponse>(`${this.apiUrl}/files/upload`, formData);
   }
+
+  generateReport(fileId: string, payload: any): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/files/${fileId}/report`, payload, {
+      responseType: 'blob'
+    });
+  }
 }

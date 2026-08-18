@@ -16,6 +16,7 @@ export interface ApiPaginationMeta {
 }
 
 export interface ApiUploadData {
+  id: string;
   filename: string;
   total_rows: number;
   columns: ApiColumnMetadata[];

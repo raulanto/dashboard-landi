@@ -17,6 +17,9 @@ import { GridFiltersComponent } from '@shared/components/grid-filters/grid-filte
 import { GlobalSidenavService } from '@shared/services/global-sidenav.service';
 import { ApiColumnMetadata } from '@shared/models/api.models';
 import { GridReportService } from '@shared/services/grid-report.service';
+import { AppButtonComponent,AppBadgeComponent } from '@/shared/ui';
+import { PdfViewerDialog } from '@shared/components/pdf-viewer-dialog/pdf-viewer-dialog';
+
 
 @Component({
   selector: 'app-view-tables',
@@ -30,7 +33,9 @@ import { GridReportService } from '@shared/services/grid-report.service';
     MatSidenavModule,
     PortalModule,
     DataGridComponent,
-    GridFiltersComponent
+    GridFiltersComponent,
+    AppButtonComponent,
+    AppBadgeComponent,
   ],
   providers: [GridHeatmapService, GridReportService],
   templateUrl: './view-tables.html',
@@ -67,6 +72,8 @@ export class ViewTables implements AfterViewInit, OnDestroy {
   isLoading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
   fileName = signal<string | null>(null);
+  fileId = signal<string | null>(null);
+  selectedPageSize = signal<string>('LEGAL');
 
   filteredData = computed(() => {
     return this.filterService.applyFilters(this.tableData(), this.apiMetadata());
@@ -97,6 +104,7 @@ export class ViewTables implements AfterViewInit, OnDestroy {
         next: (apiResponse) => {
           if (apiResponse.success) {
             this.apiMetadata.set(apiResponse.data.columns);
+            this.fileId.set(apiResponse.data.id);
           }
         },
         error: (err) => console.error('Error al subir a la API', err)
@@ -122,6 +130,7 @@ export class ViewTables implements AfterViewInit, OnDestroy {
     this.heatmapService.data.set([]);
     this.heatmapService.configs.set(new Map());
     this.fileName.set(null);
+    this.fileId.set(null);
     this.errorMessage.set(null);
   }
 
@@ -137,22 +146,55 @@ export class ViewTables implements AfterViewInit, OnDestroy {
     });
   }
 
+  onPageSizeChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.selectedPageSize.set(select.value);
+  }
+
   generateReport() {
     if (!this.dataGrid) return;
+    const fileId = this.fileId();
+    if (!fileId) {
+      this.errorMessage.set('El archivo aún se está subiendo. Espera un momento.');
+      return;
+    }
+    
+    this.isLoading.set(true);
+
     const hidden = Array.from(this.dataGrid.hiddenColumns());
     const ordered = this.dataGrid.orderedColumns();
     const sortCol = this.dataGrid.sortColumn();
     const sortDir = this.dataGrid.sortDirection();
     
-    const report = this.reportService.generateReport(
+    const reportPayload = this.reportService.generateReport(
       this.columns(),
       ordered,
       hidden,
       sortCol,
-      sortDir
+      sortDir,
+      this.selectedPageSize()
     );
 
-    console.log("Reporte Generado:", report);
-    alert("Reporte generado con éxito. Revisa la consola para más detalles.\n\n" + JSON.stringify(report, null, 2));
+    this.fileApi.generateReport(fileId, reportPayload).subscribe({
+      next: (blob) => {
+        this.isLoading.set(false);
+        const pdfUrl = URL.createObjectURL(blob);
+        this.dialog.open(PdfViewerDialog, {
+          width: '100vw',
+          height: '100vh',
+          maxWidth: '100vw',
+          panelClass: 'full-screen-pdf-dialog',
+          data: {
+            pdfUrl,
+            fileName: this.fileName()
+          }
+        });
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        console.error('Error generating report:', err);
+        this.errorMessage.set('Hubo un error al generar el reporte.');
+      }
+    });
   }
 }

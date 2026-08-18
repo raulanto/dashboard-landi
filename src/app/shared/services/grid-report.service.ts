@@ -13,6 +13,7 @@ export class GridReportService {
     hiddenColumns: string[],
     sortColumn: string | null,
     sortDirection: string | null,
+    pageSize: string = 'LEGAL'
   ) {
     const filters = Array.from(this.filterService.filters().entries()).map(([col, filter]) => {
       const result: any = {
@@ -47,16 +48,17 @@ export class GridReportService {
       });
 
     return {
-      schema: {
+      schema_: {
         totalColumns: allColumns.length,
         allColumns: allColumns,
         orderedColumns: orderedColumns,
         visibleColumns: orderedColumns.filter((c) => !hiddenColumns.includes(c)),
         hiddenColumns: hiddenColumns,
+        pageSize: pageSize
       },
       sort: {
-        column: sortColumn,
-        direction: sortColumn ? sortDirection : null,
+        column: sortColumn || "",
+        direction: sortDirection || ""
       },
       heatmaps: heatmaps,
       filters: filters,
