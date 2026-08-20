@@ -46,8 +46,7 @@ export class ProfileCardComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.authService.logout();
-        this.router.navigate(['/login']);
+        this.authService.logout().then(() => this.router.navigate(['/auth/login']));
       }
     });
   }
