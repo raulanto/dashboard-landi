@@ -71,6 +71,15 @@ export class DashboardLayout {
       items: [
         { path: '/dashboard/view-tables', icon: 'table_view', label: 'Tablas' },
       ]
+    },
+    {
+      title: 'Administración',
+      collapsible: true,
+      expanded: false,
+      items: [
+        { path: '/dashboard/roles', icon: 'manage_accounts', label: 'Roles' },
+        { path: '/dashboard/permissions', icon: 'security', label: 'Permisos' },
+      ]
     }
   ];
 

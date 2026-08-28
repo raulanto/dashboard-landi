@@ -7,6 +7,12 @@ import { routes } from './app.routes';
 import { credentialsInterceptor } from './core/interceptors/credentials.interceptor';
 import { AUTH_API_PORT } from './core/adapters/auth-api.port';
 import { FastApiAuthAdapter } from './core/adapters/fastapi-auth.adapter';
+import { ROLES_API_PORT } from './core/adapters/roles-api.port';
+import { FastApiRolesAdapter } from './core/adapters/fastapi-roles.adapter';
+import { PERMISSIONS_API_PORT } from './core/adapters/permissions-api.port';
+import { FastApiPermissionsAdapter } from './core/adapters/fastapi-permissions.adapter';
+import { USERS_API_PORT } from './core/adapters/users-api.port';
+import { FastApiUsersAdapter } from './core/adapters/fastapi-users.adapter';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +21,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([credentialsInterceptor])),
     provideAnimationsAsync(),
     { provide: AUTH_API_PORT, useClass: FastApiAuthAdapter },
+    { provide: ROLES_API_PORT, useClass: FastApiRolesAdapter },
+    { provide: PERMISSIONS_API_PORT, useClass: FastApiPermissionsAdapter },
+    { provide: USERS_API_PORT, useClass: FastApiUsersAdapter },
   ]
 };

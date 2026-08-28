@@ -13,6 +13,17 @@ export interface UserReadDto {
 export interface UserCreateDto {
   email: string;
   password: string;
+  is_active?: boolean | null;
+  is_superuser?: boolean | null;
+  is_verified?: boolean | null;
+}
+
+export interface UserUpdateDto {
+  password?: string | null;
+  email?: string | null;
+  is_active?: boolean | null;
+  is_superuser?: boolean | null;
+  is_verified?: boolean | null;
 }
 
 export type ApiErrorDetail =

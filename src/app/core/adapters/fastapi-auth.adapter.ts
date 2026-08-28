@@ -5,20 +5,8 @@ import { environment } from '@env/environment';
 import { AuthApiPort } from './auth-api.port';
 import { User } from '../models/user.model';
 import { UserCreateDto, UserReadDto } from '../models/auth-api.models';
-
-const FORM_URL_ENCODED_HEADERS = { 
-  'Content-Type': 'application/x-www-form-urlencoded' 
-};
-
-function toUser(dto: UserReadDto): User {
-  return {
-    id: dto.id,
-    email: dto.email,
-    isActive: dto.is_active,
-    isSuperuser: dto.is_superuser,
-    isVerified: dto.is_verified,
-  };
-}
+import { FORM_URL_ENCODED_HEADERS } from '../utils/fastapi.utils';
+import { toUser } from './user.mapper';
 
 /**
  * Adapter concreto para la API FastAPI (fastapi-users). Habla en HTTP/DTOs
@@ -31,6 +19,14 @@ export class FastApiAuthAdapter implements AuthApiPort {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
+  /**
+   * Inicia sesión en el sistema
+   * @param email string
+   * @param password string
+   * @returns Observable<void>
+   * @method POST
+   * @route /auth/cookie/login
+   */
   login(email: string, password: string): Observable<void> {
     const body = new HttpParams().set('username', email).set('password', password);
 
@@ -39,15 +35,28 @@ export class FastApiAuthAdapter implements AuthApiPort {
     });
   }
 
+  /**
+   * Cierra sesión en el sistema
+   * @returns Observable<void>
+   * @method POST
+   * @route /auth/cookie/logout
+   */
   logout(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/auth/cookie/logout`, null);
   }
+
 
   register(email: string, password: string): Observable<User> {
     const payload: UserCreateDto = { email, password };
     return this.http.post<UserReadDto>(`${this.baseUrl}/auth/register`, payload).pipe(map(toUser));
   }
 
+  /**
+   * Obtiene el usuario actual
+   * @returns Observable<User>
+   * @method GET
+   * @route /auth/cookie/me
+   */
   getCurrentUser(): Observable<User> {
     return this.http.get<UserReadDto>(`${this.baseUrl}/users/me`).pipe(map(toUser));
   }

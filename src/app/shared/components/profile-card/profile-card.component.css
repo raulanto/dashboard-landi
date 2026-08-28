@@ -108,10 +108,6 @@
     margin: 0 auto;
 }
 
-::ng-deep .mat-mdc-menu-panel.custom-user-menu {
-    border-radius: 12px !important;
-}
-
 .profile-avatar-box.avatar-analista {
     background-color: #ffe66d !important;
     color: #5a4a00 !important;

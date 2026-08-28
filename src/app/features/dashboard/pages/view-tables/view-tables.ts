@@ -17,7 +17,7 @@ import { GridFiltersComponent } from '@shared/components/grid-filters/grid-filte
 import { GlobalSidenavService } from '@shared/services/global-sidenav.service';
 import { ApiColumnMetadata } from '@shared/models/api.models';
 import { GridReportService } from '@shared/services/grid-report.service';
-import { AppButtonComponent,AppBadgeComponent } from '@/shared/ui';
+import { AppButtonComponent } from '@/shared/ui';
 import { PdfViewerDialog } from '@shared/components/pdf-viewer-dialog/pdf-viewer-dialog';
 
 
@@ -34,8 +34,7 @@ import { PdfViewerDialog } from '@shared/components/pdf-viewer-dialog/pdf-viewer
     PortalModule,
     DataGridComponent,
     GridFiltersComponent,
-    AppButtonComponent,
-    AppBadgeComponent,
+    AppButtonComponent
   ],
   providers: [GridHeatmapService, GridReportService],
   templateUrl: './view-tables.html',
