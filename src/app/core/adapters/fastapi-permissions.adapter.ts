@@ -11,7 +11,7 @@ import {
   ApiResponse_PermissionResponseDto,
   ApiResponse_List_PermissionResponseDto
 } from '../models/permissions-api.models';
-import { toPermission } from './permission.mapper';
+import { toPermission } from '../mappers/permission.mapper';
 
 @Injectable()
 export class FastApiPermissionsAdapter implements PermissionsApiPort {

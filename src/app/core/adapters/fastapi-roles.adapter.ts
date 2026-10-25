@@ -11,7 +11,7 @@ import {
   ApiResponse_RoleResponseDto,
   ApiResponse_List_RoleResponseDto
 } from '../models/roles-api.models';
-import { toRole } from './role.mapper';
+import { toRole } from '../mappers/role.mapper';
 
 @Injectable()
 export class FastApiRolesAdapter implements RolesApiPort {

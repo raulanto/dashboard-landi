@@ -9,7 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [authGuard],
+
     loadComponent: () => import('@/features/dashboard/components/dashboard-layout/dashboard-layout').then(m => m.DashboardLayout),
     title: 'Inicio',
     children: [

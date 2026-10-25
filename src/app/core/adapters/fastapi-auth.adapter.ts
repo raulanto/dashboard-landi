@@ -6,7 +6,7 @@ import { AuthApiPort } from './auth-api.port';
 import { User } from '../models/user.model';
 import { UserCreateDto, UserReadDto } from '../models/auth-api.models';
 import { FORM_URL_ENCODED_HEADERS } from '../utils/fastapi.utils';
-import { toUser } from './user.mapper';
+import { toUser } from '../mappers/user.mapper';
 
 /**
  * Adapter concreto para la API FastAPI (fastapi-users). Habla en HTTP/DTOs

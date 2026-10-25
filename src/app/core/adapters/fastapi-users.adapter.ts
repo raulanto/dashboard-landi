@@ -5,7 +5,7 @@ import { environment } from '@env/environment';
 import { UsersApiPort } from './users-api.port';
 import { User } from '@/core/models/user.model';
 import { UserReadDto, UserUpdateDto, UserCreateDto } from '@/core/models/auth-api.models';
-import { toUser } from './user.mapper';
+import { toUser } from '../mappers/user.mapper';
 
 @Injectable()
 export class FastApiUsersAdapter implements UsersApiPort {

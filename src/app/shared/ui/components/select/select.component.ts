@@ -9,28 +9,14 @@ import {
   signal,
   computed,
   forwardRef,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatIconModule } from '@angular/material/icon';
+import { SelectOption, SelectVariant, SelectColor, SelectSize } from './select.types';
 
-export type SelectVariant = 'outlined' | 'filled';
-export type SelectColor =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'success'
-  | 'warning'
-  | 'info'
-  | 'error';
-export type SelectSize = 'xs' | 'sm' | 'md' | 'lg';
-
-export interface SelectOption {
-  label: string;
-  value: any;
-}
+export * from './select.types';
 
 const APP_SELECT_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -40,10 +26,8 @@ const APP_SELECT_VALUE_ACCESSOR = {
 
 @Component({
   selector: 'app-select',
-  standalone: true,
   imports: [MatIconModule, OverlayModule],
   providers: [APP_SELECT_VALUE_ACCESSOR],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'app-select-host',
     '[class]': 'hostClasses()',
@@ -60,6 +44,10 @@ const APP_SELECT_VALUE_ACCESSOR = {
       (keydown.arrowDown)="open(); $event.preventDefault()"
       (keydown.arrowUp)="open(); $event.preventDefault()"
       #field
+      role="combobox"
+      [attr.aria-expanded]="isOpen()"
+      aria-haspopup="listbox"
+      [attr.aria-disabled]="disabled()"
     >
       @if (prefixIcon()) {
         <mat-icon class="app-select__icon">{{ prefixIcon() }}</mat-icon>
@@ -92,20 +80,53 @@ const APP_SELECT_VALUE_ACCESSOR = {
       (backdropClick)="close()"
       (detach)="close()"
     >
-      <div class="app-select__dropdown">
-        @for (option of options(); track option.value) {
+      <div class="app-select__dropdown" role="listbox">
+        @if (searchable()) {
+          <div class="app-select__search-header">
+            <mat-icon class="app-select__search-icon">search</mat-icon>
+            <input
+              #searchInput
+              class="app-select__search-input"
+              [placeholder]="searchPlaceholder()"
+              [value]="searchQuery()"
+              (input)="onSearchInput($event)"
+              (keydown)="$event.stopPropagation()"
+              (keydown.escape)="close()"
+              aria-label="Buscar opciones"
+            />
+            @if (searchQuery()) {
+              <button
+                type="button"
+                class="app-select__search-clear"
+                (click)="clearSearch($event)"
+                aria-label="Limpiar búsqueda"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </div>
+        }
+
+        @for (option of filteredOptions(); track option.value) {
           <div
             class="app-select__option"
             [class.app-select__option--selected]="option.value === value()"
             (click)="selectOption(option)"
+            role="option"
+            [attr.aria-selected]="option.value === value()"
           >
             {{ option.label }}
+          </div>
+        } @empty {
+          <div class="app-select__empty">
+            <mat-icon>search_off</mat-icon>
+            <span>{{ notFoundText() }}</span>
           </div>
         }
       </div>
     </ng-template>
 
-    @if (errorMessage(); as err) {
+    @if (effectiveError(); as err) {
       <span class="app-select__helper app-select__helper--error" role="alert">{{ err }}</span>
     } @else if (hint(); as h) {
       <span class="app-select__helper">{{ h }}</span>
@@ -119,6 +140,9 @@ export class AppSelectComponent implements ControlValueAccessor, AfterViewInit, 
   @ViewChild('field')
   private fieldRef?: ElementRef<HTMLDivElement>;
 
+  @ViewChild('searchInput')
+  private searchInputRef?: ElementRef<HTMLInputElement>;
+
   label = input<string | null>(null);
   placeholder = input('');
   options = input<SelectOption[]>([]);
@@ -129,18 +153,41 @@ export class AppSelectComponent implements ControlValueAccessor, AfterViewInit, 
   errorMessage = input<string | null>(null);
   prefixIcon = input<string | null>(null);
   required = input(false);
+  searchable = input(false);
+  searchPlaceholder = input('Buscar...');
+  notFoundText = input('No se encontraron resultados');
 
-  value = signal<any>('');
+  value = signal<unknown>('');
   disabled = signal(false);
   focused = signal(false);
   isOpen = signal(false);
   triggerWidth = signal<number | string>('100%');
+  searchQuery = signal('');
+  touched = signal(false);
 
-  private onChange: (value: any) => void = () => {};
+  requiredErrorMessage = input('Este campo es requerido');
+
+  private onChange: (value: unknown) => void = () => {};
   private onTouched: () => void = () => {};
 
   hasValue = computed(() => this.value() !== '' && this.value() !== null && this.value() !== undefined);
-  hasError = computed(() => !!this.errorMessage());
+
+  isCatalogValid = computed(() => {
+    if (!this.hasValue()) return true;
+    return this.options().some((o) => o.value === this.value());
+  });
+
+  catalogError = computed(() =>
+    !this.isCatalogValid() ? 'La opción seleccionada no pertenece al catálogo' : null
+  );
+
+  requiredError = computed(() =>
+    this.required() && this.touched() && !this.hasValue() ? this.requiredErrorMessage() : null
+  );
+
+  effectiveError = computed(() => this.errorMessage() || this.catalogError() || this.requiredError());
+  hasError = computed(() => !!this.effectiveError());
+
   isFloating = computed(() => this.focused() || this.hasValue() || !!this.placeholder());
   
   hasPrefixIcon = computed(() => !!this.prefixIcon());
@@ -149,6 +196,12 @@ export class AppSelectComponent implements ControlValueAccessor, AfterViewInit, 
     const val = this.value();
     const option = this.options().find(o => o.value === val);
     return option ? option.label : '';
+  });
+
+  filteredOptions = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    if (!query) return this.options();
+    return this.options().filter(o => o.label.toLowerCase().includes(query));
   });
 
   hostClasses = computed(() =>
@@ -182,11 +235,11 @@ export class AppSelectComponent implements ControlValueAccessor, AfterViewInit, 
     }
   }
 
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     this.value.set(value ?? '');
   }
 
-  registerOnChange(fn: (value: any) => void): void {
+  registerOnChange(fn: (value: unknown) => void): void {
     this.onChange = fn;
   }
 
@@ -214,23 +267,42 @@ export class AppSelectComponent implements ControlValueAccessor, AfterViewInit, 
     }
     this.isOpen.set(true);
     this.focused.set(true);
+
+    if (this.searchable()) {
+      setTimeout(() => this.searchInputRef?.nativeElement.focus(), 50);
+    }
   }
 
   close(): void {
     this.isOpen.set(false);
+    this.searchQuery.set('');
+    this.touched.set(true);
     this.onTouched();
     if (this.fieldRef) {
-        this.fieldRef.nativeElement.focus();
+      this.fieldRef.nativeElement.focus();
     }
+  }
+
+  onSearchInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+  }
+
+  clearSearch(event: MouseEvent): void {
+    event.stopPropagation();
+    this.searchQuery.set('');
+    this.searchInputRef?.nativeElement.focus();
   }
 
   selectOption(option: SelectOption): void {
     this.value.set(option.value);
+    this.touched.set(true);
     this.onChange(option.value);
     this.close();
   }
 
   onBlur(): void {
+    this.touched.set(true);
     this.onTouched();
   }
 }
