@@ -17,3 +17,10 @@ export * from './components/slide-toggle';
 export * from './components/datepicker';
 export * from './components/form-field';
 export * from './validators';
+
+
+export * from './components/chips';
+export * from './components/slider';
+export * from './components/button-toggle';
+export * from './components/number-stepper';
+export * from './components/stepper';
