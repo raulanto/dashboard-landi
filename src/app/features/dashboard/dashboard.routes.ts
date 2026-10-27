@@ -30,5 +30,10 @@ export const DASHBOARD_ROUTES: Routes = [
         path: 'form-view',
         loadComponent: () => import('./pages/vista-formulario/vista-formulario').then((c) => c.VistaFormulario),
         title: 'Vista de Formularios',
+    },
+    {
+        path: 'ui-demo',
+        loadComponent: () => import('./pages/ui-demo/ui-demo.component').then((c) => c.UiDemoComponent),
+        title: 'UI Demo',
     }
 ];

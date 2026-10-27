@@ -16,8 +16,22 @@ import {
   AppSearchableSelectComponent,
   AppAutocompleteComponent,
   SelectOption,
-  App
+  AppCheckboxComponent,
+  AppCheckboxGroupComponent,
+  AppRadioGroupComponent,
+  AppSlideToggleComponent,
+  AppDatepickerComponent,
+  AppDateRangeComponent,
+  AppFormFieldComponent,
+  AppChipsComponent,
+  AppSliderComponent,
+  AppButtonToggleComponent,
+  AppNumberStepperComponent,
+  AppStepperComponent,
+  AppStepComponent,
+  AppRepeaterComponent
 } from '@shared/ui';
+import { App } from '@/app';
 
 @Component({
   selector: 'app-home',
@@ -35,12 +49,27 @@ import {
     AppMultiSelectComponent,
     AppSearchableSelectComponent,
     AppAutocompleteComponent,
+    AppCheckboxComponent,
+    AppCheckboxGroupComponent,
+    AppRadioGroupComponent,
+    AppSlideToggleComponent,
+    AppDatepickerComponent,
+    AppDateRangeComponent,
+    AppFormFieldComponent,
+    AppChipsComponent,
+    AppSliderComponent,
+    AppButtonToggleComponent,
+    AppNumberStepperComponent,
+    AppStepperComponent,
+    AppStepComponent,
+    AppRepeaterComponent
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
   activeTab = signal<string>('buttons');
+
 
   tabs: TabItem[] = [
     {
@@ -72,6 +101,61 @@ export class Home {
       id: 'files',
       label: 'Archivos',
       icon: 'upload_file',
+    },
+    {
+      id: 'checkboxes',
+      label: 'Checkboxes',
+      icon: 'check_box',
+    },
+    {
+      id: 'radios',
+      label: 'Radios',
+      icon: 'radio_button_checked',
+    },
+    {
+      id: 'slide-toggles',
+      label: 'Slide Toggles',
+      icon: 'toggle_on',
+    },
+    {
+      id: 'datepickers',
+      label: 'Datepickers',
+      icon: 'date_range',
+    },
+    {
+      id: 'form-fields',
+      label: 'Form Fields',
+      icon: 'form_field',
+    },
+    {
+      id: 'chips',
+      label: 'Chips',
+      icon: 'label',
+    },
+    {
+      id: 'sliders',
+      label: 'Sliders',
+      icon: 'slider',
+    },
+    {
+      id: 'button-toggles',
+      label: 'Button Toggles',
+      icon: 'button_toggle',
+    },
+    {
+      id: 'number-steppers',
+      label: 'Number Steppers',
+      icon: 'number_stepper',
+    },
+    {
+      id: 'steppers',
+      label: 'Steppers',
+      icon: 'stepper',
+    },
+    {
+      id: 'repeater',
+      label: 'Repeater',
+      icon: 'repeater',
     },
   ];
 
