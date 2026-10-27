@@ -57,9 +57,7 @@ $card-colors: (
   background-color: var(--mat-sys-surface-container-low);
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   
-  &:hover {
-    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
-  }
+
 }
 
 // Filled
@@ -67,9 +65,7 @@ $card-colors: (
   background-color: var(--mat-sys-surface-container-highest);
   box-shadow: none;
 
-  &:hover {
-    background-color: var(--mat-sys-surface-container-highest); // Hover color could be slightly different if elevation applies, but M3 standard mostly uses state layers.
-  }
+
 }
 
 // Outlined
@@ -78,9 +74,7 @@ $card-colors: (
   border: 1px solid var(--mat-sys-outline-variant);
   box-shadow: none;
 
-  &:hover {
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-  }
+
 }
 
 // ---- Colores ----

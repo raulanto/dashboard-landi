@@ -27,7 +27,7 @@ export type CardColor =
   styleUrl: './card.component.scss',
 })
 export class AppCardComponent {
-  variant = input<CardVariant>('elevated');
+  variant = input<CardVariant>('outlined');
   color = input<CardColor>('surface');
 
   hostClasses = computed(() =>

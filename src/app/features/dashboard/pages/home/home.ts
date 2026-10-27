@@ -16,6 +16,7 @@ import {
   AppSearchableSelectComponent,
   AppAutocompleteComponent,
   SelectOption,
+  App
 } from '@shared/ui';
 
 @Component({

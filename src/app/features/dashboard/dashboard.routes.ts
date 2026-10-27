@@ -26,4 +26,9 @@ export const DASHBOARD_ROUTES: Routes = [
         redirectTo: 'home',
         pathMatch: 'full',
     },
+    {
+        path: 'form-view',
+        loadComponent: () => import('./pages/vista-formulario/vista-formulario').then((c) => c.VistaFormulario),
+        title: 'Vista de Formularios',
+    }
 ];
